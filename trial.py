@@ -3,10 +3,14 @@ from dotenv import load_dotenv
 import json
 import re
 import os
+
 load_dotenv()
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-model = genai.GenerativeModel("gemini-1.5-flash")
-response = model.generate_content("Explain how AI works")
+client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+
+response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=["How does AI work?"]
+)
 print(response.text)
 
 def extract_and_validate_json(text):
@@ -23,5 +27,5 @@ def extract_and_validate_json(text):
     else:
         return "No JSON found in the text."
 
-result = extract_and_validate_json(text)
+result = extract_and_validate_json(response.text)
 print(result)
